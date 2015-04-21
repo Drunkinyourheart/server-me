@@ -1,0 +1,160 @@
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <!-- 把依赖的jar包拷到lib目录下 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 以utf-8编码拷贝配置文件，拷贝过程中是可以做变量替换的，也就是说你的配置文件可以是个模板，里面的${}所包含的内容是可以拷贝过程中替换的 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <outputDirectory>${project.build.directory}</outputDirectory><!--
+								把配置文件拷到和jar包同一个路径下 -->
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/</directory>
+                                    <includes>
+                                        <include>*.conf</include>
+                                        <include>log4j.xml</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>script</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 打jar包时需要把配置文件给排除在外 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>distribute</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>lib</classifier>
+                            <excludes>
+                                <exclude>*.conf</exclude>
+                                <exclude>log4j.xml</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+<!-- mojo -->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>appassembler-maven-plugin</artifactId>-->
+                <!--<version>1.10</version>-->
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; Set the target configuration directory to be used in the bin scripts &ndash;&gt;-->
+                    <!--<configurationDirectory>conf</configurationDirectory>-->
+                    <!--&lt;!&ndash; Copy the contents from "/src/main/config" to the target-->
+                         <!--configuration directory in the assembled application &ndash;&gt;-->
+                    <!--<copyConfigurationDirectory>true</copyConfigurationDirectory>-->
+                    <!--&lt;!&ndash; Include the target configuration directory in the beginning of-->
+                         <!--the classpath declaration in the bin scripts &ndash;&gt;-->
+                    <!--<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>-->
+                    <!--&lt;!&ndash; set alternative assemble directory &ndash;&gt;-->
+                    <!--<assembleDirectory>${project.build.directory}/mycompany-assemble</assembleDirectory>-->
+                    <!--&lt;!&ndash; Extra JVM arguments that will be included in the bin scripts &ndash;&gt;-->
+                    <!--<extraJvmArguments>-Xms128m</extraJvmArguments>-->
+                    <!--&lt;!&ndash; Generate bin scripts for windows and unix pr default &ndash;&gt;-->
+                    <!--<platforms>-->
+                        <!--<platform>windows</platform>-->
+                        <!--<platform>unix</platform>-->
+                    <!--</platforms>-->
+                    <!--<programs>-->
+                        <!--<program>-->
+                            <!--<mainClass>com.mycompany.app.WindowsApp1</mainClass>-->
+                            <!--<id>app1</id>-->
+                            <!--&lt;!&ndash; Only generate windows bat script for this application &ndash;&gt;-->
+                            <!--<platforms>-->
+                                <!--<platform>windows</platform>-->
+                            <!--</platforms>-->
+                        <!--</program>-->
+                        <!--<program>-->
+                            <!--<mainClass>com.mycompany.app.UnixApp2</mainClass>-->
+                            <!--<id>app2</id>-->
+                            <!--&lt;!&ndash; Only generate unix shell script for this application &ndash;&gt;-->
+                            <!--<platforms>-->
+                                <!--<platform>unix</platform>-->
+                            <!--</platforms>-->
+                        <!--</program>-->
+                        <!--<program>-->
+                            <!--<mainClass>com.mycompany.app.App3</mainClass>-->
+                            <!--<commandLineArguments>-->
+                                <!--&lt;!&ndash; Add two predefined command line arguments to the call of App3 &ndash;&gt;-->
+                                <!--<commandLineArgument>arg1</commandLineArgument>-->
+                                <!--<commandLineArgument>arg2</commandLineArgument>-->
+                            <!--</commandLineArguments>-->
+                            <!--<id>app3</id>-->
+                        <!--</program>-->
+                        <!--<program>-->
+                            <!--<mainClass>com.mycompany.app.App4</mainClass>-->
+                            <!--<id>app4</id>-->
+                        <!--</program>-->
+                    <!--</programs>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.10</version>
+                <configuration>
+                    <programs>
+                        <program>
+                            <mainClass>com.mycompany.app.App</mainClass>
+                            <id>app</id>
+                        </program>
+                    </programs>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>

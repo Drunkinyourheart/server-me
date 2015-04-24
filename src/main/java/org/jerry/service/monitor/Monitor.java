@@ -79,6 +79,7 @@ public class Monitor extends Thread implements LifeCycle {
                 e.printStackTrace();
             }
         }
+        LOGGER.info("monitor stoped at : " + System.currentTimeMillis());
 
     }
 }

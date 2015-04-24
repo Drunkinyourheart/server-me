@@ -2,8 +2,9 @@ package org.jerry.service.bootstrap;
 
 import org.jerry.service.model.consumer.Consumer;
 import org.jerry.service.model.datatype.Event;
-import org.jerry.service.model.datatype.EventImpl;
-import org.jerry.service.model.worker.Worker;
+import org.jerry.service.model.producer.Producer;
+import org.jerry.service.model.producer.XmlProducer;
+import org.jerry.service.model.worker.PdcCsmWorker;
 import org.jerry.service.monitor.Monitor;
 import org.jerry.service.server.DemoHandler;
 import org.jerry.service.server.HttpServer;
@@ -13,10 +14,9 @@ import java.net.InetSocketAddress;
 
 /**
  * @author Jerry Deng
- * @date 4/22/15.
+ * @date 4/24/15.
  */
-public class Bootstrap {
-
+public class BootstrapF {
     public static void main(String[] args) throws IOException {
 
 
@@ -46,7 +46,11 @@ public class Bootstrap {
             }
         };
 
-        final Worker worker = new Worker(200000, 2, consumer);
+        Producer producer = new XmlProducer();
+
+
+//        final Worker worker = new Worker(200000, 2, consumer);
+        final PdcCsmWorker worker = new PdcCsmWorker(500, producer, 2, consumer, 2);
         worker.start();
 
         final Monitor monitor = new Monitor();
@@ -59,9 +63,9 @@ public class Bootstrap {
         // http://localhost:8800/?url=http://www.huxiu.com/article/100861/1.html
         System.out.println("main-app  http server is started!port is " + 8800);
 
-        for (long i = 0; i < 100000; ++i) {
-            worker.addEvent(new EventImpl(String.valueOf(i)));
-        }
+//        for (long i = 0; i < 100000; ++i) {
+//            worker.addEvent(new EventImpl(String.valueOf(i)));
+//        }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
@@ -76,5 +80,4 @@ public class Bootstrap {
 
         });
     }
-
 }

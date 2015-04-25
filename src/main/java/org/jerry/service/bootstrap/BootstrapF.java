@@ -48,7 +48,6 @@ public class BootstrapF {
 
         Producer producer = new XmlProducer();
 
-
 //        final Worker worker = new Worker(200000, 2, consumer);
         final PdcCsmWorker worker = new PdcCsmWorker(500, producer, 2, consumer, 2);
         worker.start();

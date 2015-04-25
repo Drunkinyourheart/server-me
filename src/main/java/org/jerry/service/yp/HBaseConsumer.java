@@ -1,5 +1,8 @@
-package org.jerry.service.model.consumer;
+package org.jerry.service.yp;
 
+import org.hbase.async.HBaseClient;
+import org.hbase.async.PutRequest;
+import org.jerry.service.model.consumer.Consumer;
 import org.jerry.service.model.datatype.Event;
 import org.jerry.service.monitor.Dumpable;
 
@@ -9,9 +12,20 @@ import java.io.IOException;
  * @author Jerry Deng
  * @date 4/23/15.
  */
-public class HBaseConsumer implements Consumer{
+public class HBaseConsumer implements Consumer {
+
+    private HBaseClient hBaseClient;
+
+    public HBaseConsumer(String zk_quorum) {
+        hBaseClient = new HBaseClient(zk_quorum);
+    }
+
     @Override
     public <T> T consume(Event event) throws Exception {
+
+//        (Rowevent.getValue(0);
+//        PutRequest putRequest = new PutRequest()
+
         return null;
     }
 

@@ -1,10 +1,10 @@
 package org.jerry.service.yp;
 
 import org.hbase.async.HBaseClient;
-import org.hbase.async.PutRequest;
 import org.jerry.service.model.consumer.Consumer;
 import org.jerry.service.model.datatype.Event;
-import org.jerry.service.monitor.Dumpable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -13,6 +13,8 @@ import java.io.IOException;
  * @date 4/23/15.
  */
 public class HBaseConsumer implements Consumer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HBaseConsumer.class);
 
     private HBaseClient hBaseClient;
 
